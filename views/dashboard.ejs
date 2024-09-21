@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #343a40;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 10px 0;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .sidebar a:hover {
+            color: #ffc107;
+        }
+
+        .main-content {
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .welcome-message {
+            margin-bottom: 30px;
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #343a40;
+        }
+
+        .card {
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .stat-card {
+            border-left: 5px solid #ffc107;
+        }
+
+        .stat-card h6 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: #ffc107;
+            margin-right: 10px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .flex-item {
+            flex-basis: 30%;
+            margin-bottom: 20px;
+        }
+
+        .charts-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .chart-container {
+            width: 48%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container h5 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .chart {
+            position: relative;
+            height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex">
+        <div class="sidebar">
+            <h2 class="text-white">Admin Panel</h2>
+            <a href="/profile-view">Profile</a>
+            <a href="#">Settings</a>
+            <a href="/logout">Logout</a>
+            <!-- Add more sidebar links as needed -->
+        </div>
+
+        <div class="main-content flex-grow-1">
+            <div class="container">
+                <div class="welcome-message">
+                    Welcome, <%= user.name %>
+                </div>
+
+                <!-- Statistic Cards -->
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <i class="bi bi-person stat-icon"></i>
+                                <div>
+                                    <h6>Total Users</h6>
+                                    <p>1,234</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-item">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <i class="bi bi-bar-chart stat-icon"></i>
+                                <div>
+                                    <h6>Monthly Revenue</h6>
+                                    <p>₹70,345</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-item">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <i class="bi bi-graph-up stat-icon"></i>
+                                <div>
+                                    <h6>New Signups</h6>
+                                    <p>56</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section (Side-by-Side) -->
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <h5>User Signups Over the Last 6 Months</h5>
+                        <canvas id="signupChart" class="chart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h5>Monthly Revenue</h5>
+                        <canvas id="revenueChart" class="chart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & Chart.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Signups Bar Chart
+        const signupCtx = document.getElementById('signupChart').getContext('2d');
+        const signupChart = new Chart(signupCtx, {
+            type: 'bar',
+            data: {
+                labels: ['April', 'May', 'June', 'July', 'August', 'September'],
+                datasets: [{
+                    label: 'New Signups',
+                    data: [30, 45, 60, 50, 70, 56],
+                    backgroundColor: '#ffc107',
+                    borderColor: '#343a40',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Revenue Line Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['April', 'May', 'June', 'July', 'August', 'September'],
+                datasets: [{
+                    label: 'Monthly Revenue (₹)',
+                    data: [8000, 9000, 11000, 9500, 12000, 12345],
+                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                    borderColor: '#ffc107',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
